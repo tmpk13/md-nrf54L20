@@ -44,15 +44,18 @@ components placed in non-overlapping functional blocks.
   input: an AP2112K-3.3 can't regulate 3.3V from ~2.7V (3V cell minus Schottky),
   so the SoC runs directly off the battery rail (nRF runs down to 1.7V) while
   USB feeds the same rail via the LDO; D27 blocks backfeed.
-- The custom nRF54L20 symbol pins carry GENERIC silicon names only: GPIO pins are
-  P0.xx / P1.xx / P2.xx, dedicated pins keep their chip names (VDD, VSS, XC1/XC2,
-  XL1/XL2, ANT, DEC*, SWDIO, SWDCLK, nRESET, USB_DP/USB_DM). The application
-  function (COL2, SDA, BTN_A, SPK, ...) is carried by the NET labels, not the pin
-  names - e.g. pin P1.01 sits on net COL2.
+- The symbol pin assignments are the REAL datasheet pinout (nRF54LM20A, QFN52 /
+  QGAA, Table 82 in nRF54LM20A_nRF54LM20B_Datasheet_v1.0.pdf, p.1234+): pin number,
+  name and type match the datasheet. GPIO are P0.xx/P1.xx/P2.xx; dedicated pins are
+  VDD(6,42,51), VSS(35,45,53=EP), VBUS/DECUSB/D+/D-/TXRTUNE(17-21), SWDCLK/SWDIO/
+  nRESET(31-33), ANT(34), DECRF(36), XC1/XC2(37/38), DCC(43)/DECD(44)/DECA(46).
+  Notable: the 32.768 kHz crystal is on P1.20/P1.21 (XL1/XL2, pins 48/49); DECRF is
+  tied to DECA per the datasheet; the DCDC inductor L1 sits between DCC and VDD;
+  P2.00 (pin 52) is left as a spare NC.
+- Application function is carried by the NET labels, never the pin name - e.g. real
+  pin P1.05 sits on net COL2, P0.08 on net SDA, P1.29 on BTN_A.
 - The 5x5 LED matrix was removed per request; the ROW*/COL* nets remain as plain
   U1<->edge-connector GPIO nets.
-- nRF54L20 pinout here is illustrative (a believable QFN-52 function map), not a
-  literal copy of the datasheet pin numbers.
 
 ## Misc
 - Sending many schematic-mutating MCP calls in one assistant turn is safe: the
